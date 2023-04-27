@@ -1,6 +1,8 @@
+import os
+
 from flask_restful import Resource, abort, request
 from flask_jwt_extended import jwt_required
-from flask.views import MethodView
+from flask import send_from_directory
 
 from image_service.helpers import generate_token, check_token, TokenNotValid
 
@@ -20,8 +22,10 @@ class UploadFileResource(Resource):
         except TokenNotValid:
             abort(400, message='Token not valid')
 
+        from setup import app
+
         file = request.files['file']
-        file.save(file_name)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
 
         return {'test': file_name}
-    
+
