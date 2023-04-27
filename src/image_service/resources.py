@@ -29,3 +29,9 @@ class UploadFileResource(Resource):
 
         return {'test': file_name}
 
+
+class DownloadFileResource(Resource):
+
+    def get(self, name):
+        from setup import app
+        return send_from_directory(app.config['UPLOAD_FOLDER'], name)
