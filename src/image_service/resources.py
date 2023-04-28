@@ -10,7 +10,16 @@ class UploadLinkResource(Resource):
     @jwt_required()
     def get(self, name: str):
         token = generate_token(name, 330)
-        return token
+
+        from image_service.bp import api_bp
+
+        uploadURL = request.host_url[:-1] + api_bp.url_for(UploadFileResource, token=token)
+        downloadURL = request.host_url[:-1] + api_bp.url_for(DownloadFileResource, name=name)
+
+        return {
+            'uploadURL': uploadURL,
+            'downloadURL': downloadURL
+        }
 
 
 class UploadFileResource(Resource):
