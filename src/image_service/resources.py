@@ -36,8 +36,26 @@ class UploadFileResource(Resource):
         return {'test': file_name}
 
 
+class DownloadLinkResource(Resource):
+    @jwt_required()
+    def get(self, name: str):
+        token = generate_token(name, 330)
+
+        from image_service.bp import api_bp
+
+        downloadURL = request.host_url[:-1] + api_bp.url_for(DownloadFileResource, token=token)
+
+        return {'href': downloadURL}
+    
+
 class DownloadFileResource(Resource):
 
-    def get(self, name):
+    def get(self, token):
+
+        try:
+            file_name = check_token(token)
+        except TokenNotValid:
+            abort(400, message='Token not valid')
+
         from setup import app
-        return send_from_directory(app.config['UPLOAD_FOLDER'], name)
+        return send_from_directory(app.config['UPLOAD_FOLDER'], file_name)
