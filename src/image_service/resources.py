@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask_restful import Resource, abort, request
 from flask_jwt_extended import jwt_required
@@ -14,12 +15,8 @@ class UploadLinkResource(Resource):
         from image_service.bp import api_bp
 
         uploadURL = request.host_url[:-1] + api_bp.url_for(UploadFileResource, token=token)
-        downloadURL = request.host_url[:-1] + api_bp.url_for(DownloadFileResource, name=name)
 
-        return {
-            'uploadURL': uploadURL,
-            'downloadURL': downloadURL
-        }
+        return {'href': uploadURL}
 
 
 class UploadFileResource(Resource):
