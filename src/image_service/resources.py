@@ -1,9 +1,11 @@
 import os
 import json
+from io import BytesIO
 
 from flask_restful import Resource, abort, request
 from flask_jwt_extended import jwt_required
 from flask import send_from_directory, make_response
+from werkzeug.datastructures import FileStorage
 
 from image_service.helpers import generate_token, check_token, TokenNotValid
 
@@ -13,8 +15,9 @@ class UploadLinkResource(Resource):
         token = generate_token(name, 330)
 
         from image_service.bp import api_bp
+        from setup import app
 
-        uploadURL = request.host_url[:-1] + api_bp.url_for(UploadFileResource, token=token)
+        uploadURL = app.config['BASE_DOWNLOAD_HOST'] + api_bp.url_for(UploadFileResource, token=token)
 
         return {'href': uploadURL}
 
@@ -30,7 +33,7 @@ class UploadFileResource(Resource):
 
         from setup import app
 
-        file = request.files['file']
+        file = FileStorage(BytesIO(request.data))
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
 
         return {'test': file_name}
