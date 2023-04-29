@@ -42,8 +42,9 @@ class DownloadLinkResource(Resource):
         token = generate_token(name, 330)
 
         from image_service.bp import api_bp
+        from setup import app
 
-        downloadURL = request.host_url[:-1] + api_bp.url_for(DownloadFileResource, token=token)
+        downloadURL = app.config['BASE_DOWNLOAD_HOST'] + api_bp.url_for(DownloadFileResource, token=token)
 
         return {'href': downloadURL}
     
