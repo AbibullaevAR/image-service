@@ -8,6 +8,7 @@ from flask import send_from_directory, make_response
 from werkzeug.datastructures import FileStorage
 
 from image_service.helpers import generate_token, check_token, TokenNotValid
+from image_service.services import validate_image
 
 class UploadLinkResource(Resource):
     @jwt_required()
@@ -33,10 +34,11 @@ class UploadFileResource(Resource):
 
         from setup import app
 
-        file = FileStorage(BytesIO(request.data))
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+        img = validate_image(BytesIO(request.data))
 
-        return {'test': file_name}
+        FileStorage(img).save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+
+        return make_response({}, 201)
 
 
 class DownloadLinkResource(Resource):
