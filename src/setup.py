@@ -15,4 +15,4 @@ jwt = JWTManager(app)
 app.register_blueprint(image_service_bp)
 
 if __name__ == '__main__':
-    app.run(host='192.168.0.103', port=5000)
+    app.run(host='0.0.0.0', port=5000)
