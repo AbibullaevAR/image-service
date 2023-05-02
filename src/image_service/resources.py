@@ -36,7 +36,7 @@ class UploadFileResource(Resource):
 
         img = validate_image(BytesIO(request.data))
 
-        FileStorage(img).save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+        img.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
 
         return make_response({}, 201)
 
