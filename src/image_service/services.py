@@ -10,8 +10,8 @@ class ImgNotValid(Exception):
 def validate_image(file: BytesIO, file_name: str):
 
     available_formats = {
-        'JPEG':'.jpg',
-        'PNG': '.png'
+        'JPEG': ['.jpg', '.jpeg'],
+        'PNG': ['.png']
     }
 
     # Проверяем, является ли файл изображением
@@ -24,7 +24,7 @@ def validate_image(file: BytesIO, file_name: str):
     if img.format not in ['JPEG', 'PNG']:
         raise ImgNotValid('Недопустимый формат изображения. Разрешены только JPEG, PNG')
 
-    if not file_name.endswith(available_formats[img.format]):
+    if not file_name.endswith(tuple(available_formats[img.format])):
         raise ImgNotValid('Формат изображения не совпадает с форматом в названии')
     
     return img
