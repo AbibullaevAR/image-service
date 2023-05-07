@@ -34,16 +34,13 @@ def optimize_image(img: Image) -> Image:
     width, height = img.size
 
     # Устанавливаем максимальную ширину и высоту
-    max_width = 600
-    max_height = 600
+    max_width = 550
+    max_height = 470
 
     # Вычисляем новые размеры изображения
     if width > max_width or height > max_height:
-        ratio = min(max_width / width, max_height / height)
-        new_width = round(width * ratio)
-        new_height = round(height * ratio)
 
         # Сжимаем изображение
-        return img.resize((new_width, new_height), Image.ANTIALIAS)
+        return img.resize((max_width, max_height), Image.LANCZOS)
     
     return img
