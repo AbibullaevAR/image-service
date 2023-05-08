@@ -36,11 +36,13 @@ def optimize_image(img: Image) -> Image:
     # Устанавливаем максимальную ширину и высоту
     max_width = 550
     max_height = 470
-
-    # Вычисляем новые размеры изображения
-    if width > max_width or height > max_height:
-
-        # Сжимаем изображение
-        return img.resize((max_width, max_height), Image.LANCZOS)
     
-    return img
+    # Не применяем сжатие если размеры меньше максимальных
+    if width < max_width or height < max_height:
+        return img
+
+    # Расчет новых размеров с сохранением соотношения сторон
+    if width < height:
+        return img.resize((max_width, int((max_width / width) * height)), Image.LANCZOS)
+
+    return img.resize((int((max_height / height) * width), max_height), Image.LANCZOS)
