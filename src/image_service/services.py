@@ -25,9 +25,10 @@ def optimize_image(img: Image) -> Image:
     # Получаем ширину и высоту изображения
     width, height = img.size
 
+    from setup import app
     # Устанавливаем максимальную ширину и высоту
-    max_width = 550
-    max_height = 470
+    max_width = app.config['MAX_WIDTH_RESIZE']
+    max_height = app.config['MAX_HEIGHT_RESIZE']
 
     # Не применяем сжатие если размеры меньше максимальных
     if width < max_width or height < max_height:
