@@ -27,6 +27,10 @@ FROM python:3.10.6-alpine
 RUN mkdir -p /home/app
 # create the app user
 RUN addgroup -S app && adduser -S app -G app
+# create dir for upploads file
+ARG UPLOAD_FOLDER
+ENV UPLOAD_FOLDER $UPLOAD_FOLDER
+RUN mkdir -p $UPLOAD_FOLDER
 # create the appropriate directories
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/image_service
@@ -41,6 +45,6 @@ RUN pip install --no-cache /wheels/*
 # copy project
 COPY . $APP_HOME
 # chown all the files to the app user
-RUN chown -R app:app $APP_HOME
+RUN chown -R app:app $HOME
 # change to the app user
 USER app
