@@ -35,13 +35,11 @@ class UploadFileResource(Resource):
         from setup import app
 
         try:
-            img = validate_image(BytesIO(request.data), file_name)
+            img = validate_image(BytesIO(request.data))
         except ImgNotValid as e:
             abort(400, message = e.message)
-        
-        img = optimize_image(img)
 
-        img.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+        img.save(os.path.join(app.config['UPLOAD_FOLDER'], f'{file_name}.webp'), format='webp', quality=80)
 
         return make_response({}, 201)
 
@@ -69,7 +67,7 @@ class DownloadFileResource(Resource):
             abort(400, message='Token not valid')
 
         from setup import app
-        return send_from_directory(app.config['UPLOAD_FOLDER'], file_name)
+        return send_from_directory(app.config['UPLOAD_FOLDER'], f'{file_name}.webp')
 
 
 class DeleteFileResource(Resource):
@@ -80,7 +78,7 @@ class DeleteFileResource(Resource):
         from setup import app
 
         try:
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], name))
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], f'{name}.webp'))
         except FileNotFoundError:
             abort(404, message='FileNotFoundError')
 
