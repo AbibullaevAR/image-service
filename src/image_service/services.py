@@ -21,3 +21,20 @@ def validate_image(file: BytesIO):
     
     return img
 
+def optimize_image(img: Image) -> Image:
+    # Получаем ширину и высоту изображения
+    width, height = img.size
+
+    # Устанавливаем максимальную ширину и высоту
+    max_width = 550
+    max_height = 470
+
+    # Не применяем сжатие если размеры меньше максимальных
+    if width < max_width or height < max_height:
+        return img
+
+    # Расчет новых размеров с сохранением соотношения сторон
+    if width < height:
+        return img.resize((max_width, int((max_width / width) * height)), Image.LANCZOS)
+
+    return img.resize((int((max_height / height) * width), max_height), Image.LANCZOS)
