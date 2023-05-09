@@ -8,7 +8,7 @@ from flask import send_from_directory, make_response
 from werkzeug.datastructures import FileStorage
 
 from image_service.helpers import generate_token, check_token, TokenNotValid
-from image_service.services import validate_image, optimize_image, ImgNotValid
+from image_service.services import validate_image, ImgNotValid
 
 class UploadLinkResource(Resource):
     @jwt_required()
