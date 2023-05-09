@@ -13,10 +13,10 @@ from image_service.services import validate_image, optimize_image, ImgNotValid
 class UploadLinkResource(Resource):
     @jwt_required()
     def get(self, name: str):
-        token = generate_token(name, 330)
+        from setup import app
+        token = generate_token(name, app.config['UPLOAD_LINK_LIFE_TIME'])
 
         from image_service.bp import api_bp
-        from setup import app
 
         uploadURL = app.config['BASE_DOWNLOAD_HOST'] + api_bp.url_for(UploadFileResource, token=token)
 
@@ -49,10 +49,10 @@ class UploadFileResource(Resource):
 class DownloadLinkResource(Resource):
     @jwt_required()
     def get(self, name: str):
-        token = generate_token(name, 330)
+        from setup import app
+        token = generate_token(name, app.config['DOWNLOAD_LINK_LIFE_TIME'])
 
         from image_service.bp import api_bp
-        from setup import app
 
         downloadURL = app.config['BASE_DOWNLOAD_HOST'] + api_bp.url_for(DownloadFileResource, token=token)
 
