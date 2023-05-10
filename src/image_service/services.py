@@ -16,7 +16,7 @@ def validate_image(file: BytesIO):
         raise ImgNotValid('Файл не является изображением')
 
     # Проверяем формат изображения
-    if img.format not in ['JPEG', 'PNG', 'JPG']:
+    if img.format not in ['JPEG', 'PNG', 'JPG', 'WEBP']:
         raise ImgNotValid('Недопустимый формат изображения. Разрешены только JPEG, PNG, JPG')
     
     return img
